@@ -1,0 +1,12 @@
+webpack
+    babel
+    scss
+    eslint
+    Modes
+        dev mode 
+            dev server, source map, esling, not minified js & css
+        prod mode
+            minified code
+git
+    Production
+    development
