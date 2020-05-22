@@ -1,8 +1,20 @@
 import DomListener from './DomListener';
 
 export default class ExcelComponent extends DomListener {
-  // eslint-disable-next-line class-methods-use-this
+  constructor($root, options = {}) {
+    super($root, options.listeners);
+    this.name = options.name;
+  }
+
   toHTML() {
     return '';
+  }
+
+  init() {
+    this.addDOMListener();
+  }
+
+  destroy() {
+    this.removeDOMListener();
   }
 }

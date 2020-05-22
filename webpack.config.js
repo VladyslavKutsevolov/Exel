@@ -24,7 +24,12 @@ const jsLoaders = () => {
   ];
 
   if (isDev) {
-    loaders.push({ loader: 'eslint-loader' });
+    loaders.push({
+      loader: 'eslint-loader',
+      options: {
+        emitWarning: true
+      }
+    });
   }
 
   return loaders;
