@@ -10,13 +10,7 @@
       "version": "detect"
     }
   },
-  "extends": [
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:prettier/recommended",
-    "airbnb",
-    "airbnb/hooks"
-  ],
+  "extends": ["eslint:recommended", "plugin:prettier/recommended", "airbnb"],
   "globals": {
     "Atomics": "readonly",
     "SharedArrayBuffer": "readonly"
@@ -28,7 +22,7 @@
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
-  "plugins": ["react", "prettier"],
+  "plugins": ["prettier"],
   "rules": {
     "prettier/prettier": [
       "error",
@@ -68,6 +62,11 @@
       }
     ],
     "no-throw-literal": "error",
-    "arrow-parens": [2, "as-needed", { "requireForBlockBody": true }]
+    "arrow-parens": 0,
+    "quotes": ["error", "single", { "allowTemplateLiterals": true }],
+    "class-methods-use-this": 0,
+    "operator-linebreak": "off",
+    "implicit-arrow-linebreak": 0,
+    "import/prefer-default-export": 0
   }
 }

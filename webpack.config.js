@@ -14,13 +14,22 @@ const jsLoaders = () => {
     {
       loader: 'babel-loader',
       options: {
-        presets: ['@babel/preset-env']
+        presets: ['@babel/preset-env'],
+        plugins: [
+          '@babel/plugin-proposal-class-properties',
+          '@babel/plugin-proposal-throw-expressions'
+        ]
       }
     }
   ];
 
   if (isDev) {
-    loaders.push('eslint-loader');
+    loaders.push({
+      loader: 'eslint-loader',
+      options: {
+        emitWarning: true
+      }
+    });
   }
 
   return loaders;
@@ -38,10 +47,11 @@ module.exports = {
     extensions: ['.js'],
     alias: {
       '@': path.resolve(__dirname, 'src'),
-      '@core': path.resolve(__dirname, 'src/core')
+      '@core': path.resolve(__dirname, 'src/core'),
+      Component: path.resolve(__dirname, 'src/component')
     }
   },
-  devtool: isDev ? 'sourse-map' : false,
+  devtool: isDev ? 'sourse-map' : null,
   devServer: {
     port: 3000,
     hot: isDev
