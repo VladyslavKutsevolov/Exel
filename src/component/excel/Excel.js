@@ -1,4 +1,4 @@
-import { $ } from '../../assets/dom';
+import { $ } from '../../assets/domHelper';
 
 export default class Excel {
   constructor(selector, options) {

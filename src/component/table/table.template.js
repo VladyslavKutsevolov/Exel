@@ -27,7 +27,8 @@ export const createTable = (rowCount = 15) => {
 
   // prettier-ignore
   const cells = new Array(colsCount)
-    .fill('').map(createCells)
+    .fill('')
+    .map(createCells)
     .join('');
 
   rows.push(createRows(cols));
