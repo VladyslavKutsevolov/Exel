@@ -67,6 +67,9 @@
     "class-methods-use-this": 0,
     "operator-linebreak": "off",
     "implicit-arrow-linebreak": 0,
-    "import/prefer-default-export": 0
+    "import/prefer-default-export": 0,
+    "no-nested-ternary": 0,
+    "no-return-assign": 0,
+    "no-param-reassign": 0
   }
 }
