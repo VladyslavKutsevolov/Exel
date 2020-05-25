@@ -57,6 +57,10 @@ class Dom {
   off(eventType, cb) {
     this.$el.removeEventListener(eventType, cb);
   }
+
+  cssStyle(styles = {}) {
+    return Object.assign(this.$el.style, styles);
+  }
 }
 
 export const $ = selector => new Dom(selector);
