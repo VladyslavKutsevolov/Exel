@@ -1,4 +1,5 @@
-import { $ } from '../../assets/domHelper';
+// eslint-disable-next-line import/no-unresolved
+import { $ } from '@core/domHelper';
 
 export default class Excel {
   constructor(selector, options) {
