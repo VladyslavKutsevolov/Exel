@@ -26,8 +26,6 @@ export const resizeTable = (event, $root) => {
     document.onmousemove = null;
     document.onmouseup = null;
     if (type === 'col') {
-      $parent.cssStyle({ width: `${value}px` });
-
       $root
         .findAll(`[data-col="${$parent.data.col}"]`)
         .forEach(el => (el.style.width = `${value}px`));

@@ -22,7 +22,6 @@ class Dom {
 
   append(node) {
     if (node instanceof Dom) {
-      // eslint-disable-next-line no-param-reassign
       node = node.$el;
     }
 
@@ -46,8 +45,12 @@ class Dom {
     return this.$el.getBoundingClientRect();
   }
 
-  findAll(selector) {
-    return this.$el.querySelectorAll(selector);
+  addClass(className) {
+    this.$el.classList.add(className);
+  }
+
+  removeClass(className) {
+    this.$el.classList.remove(className);
   }
 
   on(eventType, cb) {
@@ -60,6 +63,14 @@ class Dom {
 
   cssStyle(styles = {}) {
     return Object.assign(this.$el.style, styles);
+  }
+
+  findOne(selector) {
+    return $(this.$el.querySelector(selector));
+  }
+
+  findAll(selector) {
+    return this.$el.querySelectorAll(selector);
   }
 }
 

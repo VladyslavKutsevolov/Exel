@@ -3,8 +3,8 @@ const CODE = {
   Z: 90
 };
 
-const createCells = (_, index) =>
-  ` <div class="cell" data-col="${index}"  contenteditable></div>  `;
+const createCells = row => (_, col) =>
+  ` <div class="cell" data-col="${col}" data-id="${row}:${col}" contenteditable></div>  `;
 
 const createCols = (col, index) => `
     <div class="column" data-type="resizable" data-col="${index}">
@@ -44,7 +44,7 @@ export const createTable = (rowCount = 15) => {
   for (let i = 0; i < rowCount; i++) {
     const cells = new Array(colsCount)
       .fill('')
-      .map(createCells)
+      .map(createCells(i))
       .join('');
 
     rows.push(createRows(cells, i + 1));
