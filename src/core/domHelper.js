@@ -65,12 +65,23 @@ class Dom {
     return Object.assign(this.$el.style, styles);
   }
 
-  findOne(selector) {
+  find(selector) {
     return $(this.$el.querySelector(selector));
   }
 
   findAll(selector) {
     return this.$el.querySelectorAll(selector);
+  }
+
+  id(parse) {
+    if (parse) {
+      const parsed = this.id().split(':');
+      return {
+        row: +parsed[0],
+        col: +parsed[1]
+      };
+    }
+    return this.data.id;
   }
 }
 

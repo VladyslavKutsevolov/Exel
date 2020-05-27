@@ -4,7 +4,11 @@ const CODE = {
 };
 
 const createCells = row => (_, col) =>
-  ` <div class="cell" data-col="${col}" data-id="${row}:${col}" contenteditable></div>  `;
+  ` <div class="cell" 
+    data-col="${col}" 
+    data-id="${row}:${col}" 
+    data-cell="cell" 
+    contenteditable></div>  `;
 
 const createCols = (col, index) => `
     <div class="column" data-type="resizable" data-col="${index}">
