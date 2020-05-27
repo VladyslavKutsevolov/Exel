@@ -6,17 +6,19 @@ import { resizeTable } from './table.resize';
 import {
   shouldResize,
   isCell,
-  selectGroupCells
+  selectGroupCells,
+  nextSelector
 } from './table.helper.functions';
 import { TableSelection } from './TableSelection';
 
 export default class Table extends ExcelComponent {
   static className = 'excel__table';
 
-  constructor($root) {
+  constructor($root, options) {
     super($root, {
       name: 'Table',
-      listeners: ['mousedown']
+      listeners: ['mousedown', 'keydown', 'input'],
+      ...options
     });
   }
 
@@ -28,11 +30,19 @@ export default class Table extends ExcelComponent {
     this.selection = new TableSelection();
   }
 
+  selectCell($cell) {
+    this.selection.select($cell);
+    this.$observer('formula:select', $cell);
+  }
+
   init() {
     super.init();
 
-    const $cell = this.$root.find('[data-id="0:0"]');
-    this.selection.select($cell);
+    this.selectCell(this.$root.find('[data-id="0:0"]'));
+    this.$subscribe('formula:input', text => {
+      this.selection.curr.text(text);
+    });
+    this.$subscribe('formula:done', () => this.selection.curr.focus());
   }
 
   onMousedown(event) {
@@ -46,5 +56,29 @@ export default class Table extends ExcelComponent {
         this.selection.select($target);
       }
     }
+  }
+
+  onKeydown(event) {
+    const keys = [
+      'Enter',
+      'Tab',
+      'ArrowUp',
+      'ArrowDown',
+      'ArrowLeft',
+      'ArrowRight'
+    ];
+
+    const { key } = event;
+
+    if (keys.includes(key) && !event.shiftKey) {
+      event.preventDefault();
+      const id = this.selection.curr.id(true);
+      const $nextCell = this.$root.find(nextSelector(key, id));
+      this.selectCell($nextCell);
+    }
+  }
+
+  onInput({ target }) {
+    this.$observer('table:input', $(target));
   }
 }

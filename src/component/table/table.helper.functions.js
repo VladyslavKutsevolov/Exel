@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable import/no-unresolved */
 import { range } from '@core/utils';
 
@@ -18,4 +19,13 @@ export const selectGroupCells = ($target, selection, $root) => {
   const $cells = ids.map(id => $root.find(`[data-id="${id}"]`));
 
   selection.selectGroup($cells);
+};
+
+export const nextSelector = (key, { col, row }) => {
+  if (key === 'Enter' || key === 'ArrowDown') row++;
+  if (key === 'Tab' || key === 'ArrowRight') col++;
+  if (key === 'ArrowLeft') col = col - 1 < 0 ? 0 : col - 1;
+  if (key === 'ArrowUp') row = row - 1 < 0 ? 0 : row - 1;
+
+  return `[data-id="${row}:${col}"]`;
 };
