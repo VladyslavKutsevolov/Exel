@@ -33,6 +33,7 @@ export default class Table extends ExcelComponent {
   selectCell($cell) {
     this.selection.select($cell);
     this.$observer('formula:select', $cell);
+    this.$dispatch({ type: 'TEST' });
   }
 
   init() {
@@ -43,6 +44,7 @@ export default class Table extends ExcelComponent {
       this.selection.curr.text(text);
     });
     this.$subscribe('formula:done', () => this.selection.curr.focus());
+    this.$listen(state => console.log('TableState', state));
   }
 
   onMousedown(event) {
@@ -53,7 +55,7 @@ export default class Table extends ExcelComponent {
       if (event.shiftKey) {
         selectGroupCells($target, this.selection, this.$root);
       } else {
-        this.selection.select($target);
+        this.selectCell($target);
       }
     }
   }
