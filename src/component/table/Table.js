@@ -1,6 +1,7 @@
 /* eslint-disable import/no-unresolved */
 import ExcelComponent from '@core/ExcelComponent';
 import { $ } from '@core/domHelper';
+import * as actions from '../../redux/actions';
 import { createTable } from './table.template';
 import { resizeTable } from './table.resize';
 import {
@@ -23,7 +24,7 @@ export default class Table extends ExcelComponent {
   }
 
   toHTML() {
-    return createTable();
+    return createTable(20, this.store.getState());
   }
 
   prepare() {
@@ -33,7 +34,6 @@ export default class Table extends ExcelComponent {
   selectCell($cell) {
     this.selection.select($cell);
     this.$observer('formula:select', $cell);
-    this.$dispatch({ type: 'TEST' });
   }
 
   init() {
@@ -44,12 +44,20 @@ export default class Table extends ExcelComponent {
       this.selection.curr.text(text);
     });
     this.$subscribe('formula:done', () => this.selection.curr.focus());
-    this.$listen(state => console.log('TableState', state));
+  }
+
+  async resizeHandler(event) {
+    try {
+      const data = await resizeTable(event, this.$root);
+      this.$dispatch(actions.tableResizeAction(data));
+    } catch (error) {
+      console.warn('Resize Error', error.message);
+    }
   }
 
   onMousedown(event) {
     if (shouldResize(event)) {
-      resizeTable(event, this.$root);
+      this.resizeHandler(event);
     } else if (isCell) {
       const $target = $(event.target);
       if (event.shiftKey) {
