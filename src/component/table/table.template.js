@@ -3,18 +3,23 @@ const CODE = {
   Z: 90
 };
 const DEFAULT_WIDTH = 120;
+const DEFAULT_HEIGHT = 24;
 
 const getWidth = (state, index) => `${state[index] || DEFAULT_WIDTH}px`;
+const getHeight = (state, index) => `${state[index] || DEFAULT_HEIGHT}px`;
 
-const createCells = (state, row) => (_, col) =>
-  ` <div class="cell" 
+const createCells = (state, row) => (_, col) => {
+  const id = `${row}:${col}`;
+  const cellContext = state.cellState[id];
+  return ` <div class="cell" 
       data-col="${col}" 
-      data-id="${row}:${col}" 
+      data-id="${id}" 
       data-cell="cell" 
       contenteditable
-      style="width: ${getWidth(state, col)}"
+      style="width: ${getWidth(state.colState, col)}" 
       >
-    </div>  `;
+     ${cellContext || ''}</div>  `;
+};
 
 const createCols = ({ col, index, width }) => `
     <div class="column" 
@@ -25,13 +30,13 @@ const createCols = ({ col, index, width }) => `
       <div class="col-resize" data-resize="col"></div>
     </div>`;
 
-const createRows = (content, index) => {
+const createRows = (content, index, state) => {
   const resize = index
     ? '<div class="row-resize" data-resize="row"></div>'
     : '';
-
+  const height = getHeight(state, index);
   return `
-    <div class="row" data-type="resizable">
+    <div class="row" data-type="resizable" data-row="${index}" style="height: ${height}">
       <div class="row-info"">
         ${index || ''}
         ${resize}
@@ -59,15 +64,15 @@ export const createTable = (rowCount = 15, state = {}) => {
     .map(createCols)
     .join('');
 
-  rows.push(createRows(cols, null));
+  rows.push(createRows(cols, null, {}));
   // prettier-ignore
   for (let i = 0; i < rowCount; i++) {
     const cells = new Array(colsCount)
       .fill('')
-      .map(createCells(state.colState, i))
+      .map(createCells(state, i))
       .join('');
 
-    rows.push(createRows(cells, i + 1));
+    rows.push(createRows(cells, i + 1, state.rowState));
   }
   return rows.join('');
 };

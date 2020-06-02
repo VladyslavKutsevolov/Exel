@@ -42,6 +42,7 @@ export default class Table extends ExcelComponent {
     this.selectCell(this.$root.find('[data-id="0:0"]'));
     this.$subscribe('formula:input', text => {
       this.selection.curr.text(text);
+      this.updateCellState(text);
     });
     this.$subscribe('formula:done', () => this.selection.curr.focus());
   }
@@ -88,7 +89,16 @@ export default class Table extends ExcelComponent {
     }
   }
 
+  updateCellState(value) {
+    this.$dispatch(
+      actions.changeText({
+        id: this.selection.curr.id(),
+        text: value
+      })
+    );
+  }
+
   onInput({ target }) {
-    this.$observer('table:input', $(target));
+    this.updateCellState($(target).text());
   }
 }
