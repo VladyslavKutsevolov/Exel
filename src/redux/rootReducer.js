@@ -21,5 +21,5 @@ export const rootReducer = (state, { type, payload }) => {
     };
   }
 
-  return state;
+  return JSON.parse(JSON.stringify(state));
 };

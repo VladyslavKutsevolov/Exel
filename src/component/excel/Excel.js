@@ -1,6 +1,7 @@
-// eslint-disable-next-line import/no-unresolved
+/* eslint-disable import/no-unresolved */
 import { $ } from '@core/domHelper';
-import Observer from '../../core/Observer';
+import StoreSubscriber from '@core/storeSubscriber';
+import Observer from '@core/Observer';
 
 export default class Excel {
   constructor(selector, options) {
@@ -8,6 +9,7 @@ export default class Excel {
     this.components = options.components || [];
     this.observer = new Observer();
     this.store = options.store;
+    this.storeSub = new StoreSubscriber(this.store);
   }
 
   getRoot() {
@@ -28,10 +30,12 @@ export default class Excel {
 
   render() {
     this.$el.append(this.getRoot());
+    this.storeSub.subscribeComponent(this.components);
     this.components.forEach(component => component.init());
   }
 
   destroy() {
+    this.storeSub.unsubscribeFromStore();
     this.components.forEach(component => component.destroy());
   }
 }

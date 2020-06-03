@@ -1,5 +1,7 @@
 /* eslint-disable import/no-unresolved */
 import ExcelComponent from '@core/ExcelComponent';
+import { createToolbar } from './toolbar.template';
+import { $ } from '../../core/domHelper';
 
 export default class Toolbar extends ExcelComponent {
   static className = 'excel__toolbar';
@@ -13,39 +15,13 @@ export default class Toolbar extends ExcelComponent {
   }
 
   toHTML() {
-    return `<div class="button">
-                    <span class="material-icons">
-                        format_align_left
-                    </span>
-                </div>
-                <div class="button">
-                    <span class="material-icons">
-                        format_align_justify
-                    </span>
-                </div>
-                <div class="button">
-                    <span class="material-icons">
-                        format_align_right
-                    </span>
-                </div>
-                <div class="button">
-                    <span class="material-icons">
-                        format_bold
-                    </span>
-                </div>
-                <div class="button">
-                    <span class="material-icons">
-                        format_italic
-                    </span>
-                </div>
-                <div class="button">
-                    <span class="material-icons">
-                        format_underlined
-                    </span>
-                </div>`;
+    return createToolbar();
   }
 
-  onClick(event) {
-    console.log('event', event.target);
+  onClick({ target }) {
+    const $target = $(target);
+    if ($target.data.type === 'button') {
+      console.log($target.data.value);
+    }
   }
 }
