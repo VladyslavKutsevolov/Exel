@@ -1,18 +1,22 @@
-// eslint-disable-next-line import/no-unresolved
+/* eslint-disable import/no-unresolved */
 import { $ } from '@core/domHelper';
-import Observer from '../../core/Observer';
+import StoreSubscriber from '@core/storeSubscriber';
+import Observer from '@core/Observer';
 
 export default class Excel {
   constructor(selector, options) {
     this.$el = $(selector);
     this.components = options.components || [];
     this.observer = new Observer();
+    this.store = options.store;
+    this.storeSub = new StoreSubscriber(this.store);
   }
 
   getRoot() {
     const $root = $.create('div', 'excel');
     const componentOption = {
-      observer: this.observer
+      observer: this.observer,
+      store: this.store
     };
     this.components = this.components.map(Component => {
       const $el = $.create('div', Component.className);
@@ -26,10 +30,12 @@ export default class Excel {
 
   render() {
     this.$el.append(this.getRoot());
+    this.storeSub.subscribeComponent(this.components);
     this.components.forEach(component => component.init());
   }
 
   destroy() {
+    this.storeSub.unsubscribeFromStore();
     this.components.forEach(component => component.destroy());
   }
 }

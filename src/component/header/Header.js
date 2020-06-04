@@ -1,5 +1,8 @@
 /* eslint-disable import/no-unresolved */
 import ExcelComponent from '@core/ExcelComponent';
+import * as actions from '@/redux/actions';
+import { defaultTitle } from '@/const';
+import { $ } from '../../core/domHelper';
 
 export default class Header extends ExcelComponent {
   static className = 'excel__header';
@@ -7,12 +10,15 @@ export default class Header extends ExcelComponent {
   constructor($root, options) {
     super($root, {
       name: 'Header',
+      listeners: ['input'],
       ...options
     });
   }
 
   toHTML() {
-    return `<input type="text" class="input" value="New Table">
+    const title = this.store.getState().title || defaultTitle;
+
+    return `<input type="text" class="input" value="${title}">
                 <div>
                     <div class="button">
                         <span class="material-icons">
@@ -25,5 +31,10 @@ export default class Header extends ExcelComponent {
                         </span>
                     </div>
                 </div>`;
+  }
+
+  onInput({ target }) {
+    const $target = $(target);
+    this.$dispatch(actions.changeTitle($target.text()));
   }
 }

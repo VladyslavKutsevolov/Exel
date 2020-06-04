@@ -1,6 +1,9 @@
 /* eslint-disable import/no-unresolved */
 import ExcelComponent from '@core/ExcelComponent';
 import { $ } from '@core/domHelper';
+import { parse } from '@core/parse';
+import { defaultStyles } from '@/const';
+import * as actions from '../../redux/actions';
 import { createTable } from './table.template';
 import { resizeTable } from './table.resize';
 import {
@@ -23,7 +26,7 @@ export default class Table extends ExcelComponent {
   }
 
   toHTML() {
-    return createTable();
+    return createTable(20, this.store.getState());
   }
 
   prepare() {
@@ -33,27 +36,47 @@ export default class Table extends ExcelComponent {
   selectCell($cell) {
     this.selection.select($cell);
     this.$observer('formula:select', $cell);
+    const styles = $cell.getStyles(Object.keys(defaultStyles));
+    this.$dispatch(actions.currentStyles(styles));
   }
 
   init() {
     super.init();
-
     this.selectCell(this.$root.find('[data-id="0:0"]'));
-    this.$subscribe('formula:input', text => {
-      this.selection.curr.text(text);
+    this.$subscribe('formula:input', value => {
+      this.selection.curr.attr('data-value', value).text(parse(value));
+      this.updateCellState(value);
     });
     this.$subscribe('formula:done', () => this.selection.curr.focus());
+    this.$subscribe('toolbar:style', value => {
+      this.selection.applyStyle(value);
+      this.$dispatch(
+        actions.applyStyle({
+          value,
+          ids: this.selection.selectIds
+        })
+      );
+    });
+  }
+
+  async resizeHandler(event) {
+    try {
+      const data = await resizeTable(event, this.$root);
+      this.$dispatch(actions.tableResizeAction(data));
+    } catch (error) {
+      console.warn('Resize Error', error.message);
+    }
   }
 
   onMousedown(event) {
     if (shouldResize(event)) {
-      resizeTable(event, this.$root);
+      this.resizeHandler(event);
     } else if (isCell) {
       const $target = $(event.target);
       if (event.shiftKey) {
         selectGroupCells($target, this.selection, this.$root);
       } else {
-        this.selection.select($target);
+        this.selectCell($target);
       }
     }
   }
@@ -78,7 +101,16 @@ export default class Table extends ExcelComponent {
     }
   }
 
+  updateCellState(value) {
+    this.$dispatch(
+      actions.changeText({
+        id: this.selection.curr.id(),
+        value
+      })
+    );
+  }
+
   onInput({ target }) {
-    this.$observer('table:input', $(target));
+    this.updateCellState($(target).text());
   }
 }

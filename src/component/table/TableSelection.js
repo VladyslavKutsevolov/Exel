@@ -24,4 +24,12 @@ export class TableSelection {
 
     this.group.forEach(c => c.addClass(TableSelection.className));
   }
+
+  get selectIds() {
+    return this.group.map(el => el.id());
+  }
+
+  applyStyle(style) {
+    this.group.forEach(el => el.cssStyle(style));
+  }
 }
