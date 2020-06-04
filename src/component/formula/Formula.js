@@ -24,7 +24,7 @@ export default class Formula extends ExcelComponent {
     this.$formula = this.$root.find('#formula');
 
     this.$subscribe('formula:select', $cell =>
-      this.$formula.text($cell.text())
+      this.$formula.text($cell.data.value)
     );
   }
 

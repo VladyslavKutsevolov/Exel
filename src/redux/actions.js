@@ -1,4 +1,10 @@
-import { TABLE_RESIZE, CHANGE_TEXT, CURRENT_STYLES } from './types';
+import {
+  TABLE_RESIZE,
+  CHANGE_TEXT,
+  CURRENT_STYLES,
+  APPLY_STYLE,
+  CHANGE_TITLE
+} from './types';
 
 export const tableResizeAction = data => ({
   type: TABLE_RESIZE,
@@ -12,5 +18,15 @@ export const changeText = data => ({
 
 export const currentStyles = data => ({
   type: CURRENT_STYLES,
+  payload: data
+});
+
+export const applyStyle = data => ({
+  type: APPLY_STYLE,
+  payload: data
+});
+
+export const changeTitle = data => ({
+  type: CHANGE_TITLE,
   payload: data
 });

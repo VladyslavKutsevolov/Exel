@@ -28,8 +28,8 @@ export default class Toolbar extends ExcelStateComponent {
     return this.template;
   }
 
-  storeChanges(changes) {
-    this.setState(changes.currentStyles);
+  storeChanges({ currentStyles }) {
+    this.setState(currentStyles);
   }
 
   onClick({ target }) {

@@ -16,7 +16,7 @@ class Dom {
   }
 
   text(text) {
-    if (typeof text === 'string') {
+    if (typeof text !== 'undefined') {
       this.$el.textContent = text;
       return this;
     }
@@ -106,6 +106,14 @@ class Dom {
       };
     }
     return this.data.id;
+  }
+
+  attr(name, value) {
+    if (value) {
+      this.$el.setAttribute(name, value);
+      return this;
+    }
+    return this.$el.getAttribute(name);
   }
 }
 

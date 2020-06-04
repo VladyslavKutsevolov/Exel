@@ -1,6 +1,7 @@
 /* eslint-disable import/no-unresolved */
 import ExcelComponent from '@core/ExcelComponent';
 import { $ } from '@core/domHelper';
+import { parse } from '@core/parse';
 import { defaultStyles } from '@/const';
 import * as actions from '../../redux/actions';
 import { createTable } from './table.template';
@@ -36,19 +37,26 @@ export default class Table extends ExcelComponent {
     this.selection.select($cell);
     this.$observer('formula:select', $cell);
     const styles = $cell.getStyles(Object.keys(defaultStyles));
-    console.log('Table -> selectCell -> styles', styles);
     this.$dispatch(actions.currentStyles(styles));
   }
 
   init() {
     super.init();
     this.selectCell(this.$root.find('[data-id="0:0"]'));
-    this.$subscribe('formula:input', text => {
-      this.selection.curr.text(text);
-      this.updateCellState(text);
+    this.$subscribe('formula:input', value => {
+      this.selection.curr.attr('data-value', value).text(parse(value));
+      this.updateCellState(value);
     });
     this.$subscribe('formula:done', () => this.selection.curr.focus());
-    this.$subscribe('toolbar:style', style => this.selection.applyStyle(style));
+    this.$subscribe('toolbar:style', value => {
+      this.selection.applyStyle(value);
+      this.$dispatch(
+        actions.applyStyle({
+          value,
+          ids: this.selection.selectIds
+        })
+      );
+    });
   }
 
   async resizeHandler(event) {

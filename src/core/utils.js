@@ -30,3 +30,15 @@ export const isEqual = (a, b) => {
 
 export const camelToDashCase = style =>
   style.replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`);
+
+export const toInlineStyles = (styles = {}) =>
+  Object.keys(styles)
+    .map(key => `${camelToDashCase(key)}: ${styles[key]}`)
+    .join(';');
+
+export const debounce = (fn, wait) => (...args) => {
+  const timeout = setTimeout(() => {
+    clearTimeout(timeout);
+    fn(...args);
+  }, wait);
+};

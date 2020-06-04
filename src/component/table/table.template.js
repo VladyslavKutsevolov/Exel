@@ -1,6 +1,7 @@
 /* eslint-disable import/no-unresolved */
+import { toInlineStyles } from '@core/utils';
 import { defaultStyles } from '@/const';
-import { camelToDashCase } from '@core/utils';
+import { parse } from '../../core/parse';
 
 const CODE = {
   A: 65,
@@ -15,18 +16,17 @@ const getHeight = (state, index) => `${state[index] || DEFAULT_HEIGHT}px`;
 const createCells = (state, row) => (_, col) => {
   const id = `${row}:${col}`;
   const cellContext = state.cellState[id];
-  const styles = Object.keys(defaultStyles)
-    .map(key => `${camelToDashCase(key)}: ${defaultStyles[key]}`)
-    .join(';');
+  const styles = toInlineStyles({ ...defaultStyles, ...state.styleState[id] });
 
   return ` <div class="cell" 
       data-col="${col}" 
       data-id="${id}" 
+      data-value="${cellContext || ''}"
       data-cell="cell" 
       contenteditable
       style="${styles}; width: ${getWidth(state.colState, col)}" 
       >
-     ${cellContext || ''}</div>  `;
+     ${parse(cellContext) || ''}</div>  `;
 };
 
 const createCols = ({ col, index, width }) => `
