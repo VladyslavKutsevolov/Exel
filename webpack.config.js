@@ -51,7 +51,7 @@ module.exports = {
       Component: path.resolve(__dirname, 'src/component')
     }
   },
-  devtool: isDev ? 'sourse-map' : null,
+  devtool: isDev ? 'source-map' : null,
   devServer: {
     port: 3000,
     hot: isDev

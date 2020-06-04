@@ -27,3 +27,6 @@ export const isEqual = (a, b) => {
   }
   return a === b;
 };
+
+export const camelToDashCase = style =>
+  style.replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`);

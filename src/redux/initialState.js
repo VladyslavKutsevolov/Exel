@@ -1,10 +1,13 @@
-import { storage } from '../core/utils';
+/* eslint-disable import/no-unresolved */
+import { storage } from '@core/utils';
+import { defaultStyles } from '@/const';
 
 const defaultState = {
   rowState: {},
   colState: {},
   cellState: {},
-  currentText: ''
+  currentText: '',
+  currentStyles: {}
 };
 
 export const initialState = storage('excel-state')

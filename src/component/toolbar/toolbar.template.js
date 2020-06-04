@@ -13,37 +13,44 @@ const toButton = button => {
       </div>`;
 };
 
-export const createToolbar = () => {
+export const createToolbar = ({
+  textAlign,
+  textDecoration,
+  fontStyle,
+  fontWeight
+}) => {
   const buttons = [
     {
       icon: 'format_align_left',
-      active: false,
+      active: textAlign === 'left',
       value: { textAlign: 'left' }
     },
     {
       icon: 'format_align_justify',
-      active: false,
+      active: textAlign === 'center',
       value: { textAlign: 'center' }
     },
     {
       icon: 'format_align_right',
-      active: true,
+      active: textAlign === 'right',
       value: { textAlign: 'right' }
     },
     {
       icon: 'format_bold',
-      active: true,
-      value: { fontWeight: 'bold' }
+      active: fontWeight === 'bold',
+      value: { fontWeight: fontWeight === 'bold' ? 'normal' : 'bold' }
     },
     {
       icon: 'format_italic',
-      active: false,
-      value: { fontStyle: 'italic' }
+      active: fontStyle === 'italic',
+      value: { fontStyle: fontStyle === 'italic' ? 'normal' : 'italic' }
     },
     {
       icon: 'format_underlined',
-      active: false,
-      value: { textDecoration: 'underline' }
+      active: textDecoration === 'underline',
+      value: {
+        textDecoration: textDecoration === 'underline' ? 'none' : 'underline'
+      }
     }
   ];
   return buttons.map(toButton).join('');

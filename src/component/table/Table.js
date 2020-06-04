@@ -1,6 +1,7 @@
 /* eslint-disable import/no-unresolved */
 import ExcelComponent from '@core/ExcelComponent';
 import { $ } from '@core/domHelper';
+import { defaultStyles } from '@/const';
 import * as actions from '../../redux/actions';
 import { createTable } from './table.template';
 import { resizeTable } from './table.resize';
@@ -34,17 +35,20 @@ export default class Table extends ExcelComponent {
   selectCell($cell) {
     this.selection.select($cell);
     this.$observer('formula:select', $cell);
+    const styles = $cell.getStyles(Object.keys(defaultStyles));
+    console.log('Table -> selectCell -> styles', styles);
+    this.$dispatch(actions.currentStyles(styles));
   }
 
   init() {
     super.init();
-
     this.selectCell(this.$root.find('[data-id="0:0"]'));
     this.$subscribe('formula:input', text => {
       this.selection.curr.text(text);
       this.updateCellState(text);
     });
     this.$subscribe('formula:done', () => this.selection.curr.focus());
+    this.$subscribe('toolbar:style', style => this.selection.applyStyle(style));
   }
 
   async resizeHandler(event) {
@@ -93,7 +97,7 @@ export default class Table extends ExcelComponent {
     this.$dispatch(
       actions.changeText({
         id: this.selection.curr.id(),
-        text: value
+        value
       })
     );
   }

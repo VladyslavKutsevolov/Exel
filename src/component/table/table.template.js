@@ -1,3 +1,7 @@
+/* eslint-disable import/no-unresolved */
+import { defaultStyles } from '@/const';
+import { camelToDashCase } from '@core/utils';
+
 const CODE = {
   A: 65,
   Z: 90
@@ -11,12 +15,16 @@ const getHeight = (state, index) => `${state[index] || DEFAULT_HEIGHT}px`;
 const createCells = (state, row) => (_, col) => {
   const id = `${row}:${col}`;
   const cellContext = state.cellState[id];
+  const styles = Object.keys(defaultStyles)
+    .map(key => `${camelToDashCase(key)}: ${defaultStyles[key]}`)
+    .join(';');
+
   return ` <div class="cell" 
       data-col="${col}" 
       data-id="${id}" 
       data-cell="cell" 
       contenteditable
-      style="width: ${getWidth(state.colState, col)}" 
+      style="${styles}; width: ${getWidth(state.colState, col)}" 
       >
      ${cellContext || ''}</div>  `;
 };

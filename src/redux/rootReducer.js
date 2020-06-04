@@ -1,24 +1,32 @@
-import { TABLE_RESIZE, CHANGE_TEXT } from './types';
+import { TABLE_RESIZE, CHANGE_TEXT, CURRENT_STYLES } from './types';
+
+const value = (state, payload, field) => {
+  const val = state[field] || {};
+  val[payload.id] = payload.value;
+  return val;
+};
 
 export const rootReducer = (state, { type, payload }) => {
   if (type === TABLE_RESIZE) {
     const field = payload.type === 'col' ? 'colState' : 'rowState';
-    const prevState = state[field] || {};
-    prevState[payload.id] = payload.value;
     return {
       ...state,
-      [field]: prevState
+      [field]: value(state, payload, field)
     };
   }
 
   if (type === CHANGE_TEXT) {
-    const prevState = state.cellState || {};
-    prevState[payload.id] = payload.text;
+    const field = 'cellState';
     return {
       ...state,
       currentText: payload.text,
-      cellState: prevState
+      [field]: value(state, payload, field)
     };
+  }
+
+  if (type === CURRENT_STYLES) {
+    console.log(state);
+    return { ...state, currentStyles: payload };
   }
 
   return JSON.parse(JSON.stringify(state));
