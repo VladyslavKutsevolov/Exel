@@ -1,5 +1,4 @@
 /* eslint-disable import/no-unresolved */
-import { storage } from '@core/utils';
 import { defaultStyles, defaultTitle } from '@/const';
 
 const defaultState = {
@@ -18,6 +17,6 @@ const normalize = state => ({
   currentText: ''
 });
 
-export const initialState = storage('excel-state')
-  ? normalize(storage('excel-state'))
-  : defaultState;
+// eslint-disable-next-line no-confusing-arrow
+export const normalizeInitialState = state =>
+  state ? normalize(state) : defaultState;

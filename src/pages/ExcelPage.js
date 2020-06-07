@@ -8,14 +8,20 @@ import Toolbar from 'Component/toolbar/Toolbar';
 import { createStore } from '@core/createStore';
 import { rootReducer } from '@/redux/rootReducer';
 import { storage, debounce } from '@core/utils';
-import { initialState } from '@/redux/initialState';
+import { normalizeInitialState } from '../redux/initialState';
+
+const storageName = param => `excel: ${param}`;
 
 export class ExcelPage extends Page {
   getRoot() {
-    console.log(this.params);
-    const store = createStore(rootReducer, initialState);
+    const params = this.params ? this.params : Date.now().toString();
+    const storageState = storage(storageName(params));
+    const store = createStore(rootReducer, normalizeInitialState(storageState));
 
-    const storeListener = state => debounce(storage('excel-state', state), 300);
+    const storeListener = debounce(
+      state => storage(storageName(params), state),
+      300
+    );
 
     store.subscribe(storeListener);
 
