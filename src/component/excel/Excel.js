@@ -1,7 +1,9 @@
 /* eslint-disable import/no-unresolved */
 import { $ } from '@core/domHelper';
+import { updateDate } from '@/redux/actions';
 import StoreSubscriber from '@core/storeSubscriber';
 import Observer from '@core/Observer';
+import { preventDefault } from '@core/utils';
 
 export default class Excel {
   constructor(options) {
@@ -28,6 +30,10 @@ export default class Excel {
   }
 
   init() {
+    if (process.env.NODE_ENV === 'production') {
+      document.addEventListener('contextmenu', preventDefault);
+    }
+    this.store.dispatch(updateDate());
     this.storeSub.subscribeComponent(this.components);
     this.components.forEach(component => component.init());
   }
@@ -35,5 +41,6 @@ export default class Excel {
   destroy() {
     this.storeSub.unsubscribeFromStore();
     this.components.forEach(component => component.destroy());
+    document.removeEventListener('contextmenu', preventDefault);
   }
 }

@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HTMLWebPackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
@@ -51,7 +52,7 @@ module.exports = {
       Component: path.resolve(__dirname, 'src/component')
     }
   },
-  devtool: isDev ? 'source-map' : null,
+  devtool: isDev ? 'source-map' : false,
   devServer: {
     port: 3000,
     hot: isDev
@@ -75,6 +76,10 @@ module.exports = {
     }),
     new MiniCssExtractPlugin({
       filename: filename('css')
+    }),
+
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
     })
   ],
 

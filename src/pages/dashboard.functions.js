@@ -1,9 +1,20 @@
-const toHtml = () => `
+/* eslint-disable import/no-unresolved */
+import { storage } from '@core/utils';
+
+const toHtml = key => {
+  const model = storage(key);
+  const { title } = model;
+  const id = key.split(':')[1];
+  return `
      <li class="db__record">
-        <a href="#">Table # 1</a>
-        <strong>12.06.2020</strong>
+        <a href="#excel/${id}">${title}</a>
+        <strong>
+        ${new Date(model.openDate).toLocaleDateString()}
+        ${new Date(model.openDate).toLocaleTimeString()}
+        </strong>
     </li>
     `;
+};
 
 const getAllKeys = () => {
   const keys = [];
@@ -19,7 +30,6 @@ const getAllKeys = () => {
 
 export const createRecordsTable = () => {
   const keys = getAllKeys();
-  console.log('createRecordsTable -> keys', keys);
 
   if (!keys.length) {
     return `No any Table Data!`;

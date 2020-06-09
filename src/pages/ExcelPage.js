@@ -10,7 +10,7 @@ import { rootReducer } from '@/redux/rootReducer';
 import { storage, debounce } from '@core/utils';
 import { normalizeInitialState } from '../redux/initialState';
 
-const storageName = param => `excel: ${param}`;
+const storageName = param => `excel:${param}`;
 
 export class ExcelPage extends Page {
   getRoot() {
