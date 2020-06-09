@@ -3,7 +3,8 @@ import {
   CHANGE_TEXT,
   CURRENT_STYLES,
   APPLY_STYLE,
-  CHANGE_TITLE
+  CHANGE_TITLE,
+  UPDATE_DATE
 } from './types';
 
 export const tableResizeAction = data => ({
@@ -29,4 +30,8 @@ export const applyStyle = data => ({
 export const changeTitle = data => ({
   type: CHANGE_TITLE,
   payload: data
+});
+
+export const updateDate = () => ({
+  type: UPDATE_DATE
 });

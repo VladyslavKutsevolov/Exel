@@ -42,3 +42,7 @@ export const debounce = (fn, wait) => (...args) => {
     fn(...args);
   }, wait);
 };
+
+export const preventDefault = e => {
+  e.preventDefault();
+};

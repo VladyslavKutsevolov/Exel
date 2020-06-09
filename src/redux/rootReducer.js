@@ -3,7 +3,8 @@ import {
   CHANGE_TEXT,
   CURRENT_STYLES,
   APPLY_STYLE,
-  CHANGE_TITLE
+  CHANGE_TITLE,
+  UPDATE_DATE
 } from './types';
 
 const value = (state, payload, field) => {
@@ -49,6 +50,10 @@ export const rootReducer = (state, { type, payload }) => {
 
   if (type === CHANGE_TITLE) {
     return { ...state, title: payload };
+  }
+
+  if (type === UPDATE_DATE) {
+    return { ...state, openDate: new Date().toJSON() };
   }
 
   return JSON.parse(JSON.stringify(state));
