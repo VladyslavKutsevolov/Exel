@@ -1,5 +1,5 @@
 /* eslint-disable import/no-unresolved */
-import { $ } from '@core/domHelper';
+import { $ } from '../domHelper';
 import { ActiveRoute } from './ActiveRoute';
 
 export class Router {

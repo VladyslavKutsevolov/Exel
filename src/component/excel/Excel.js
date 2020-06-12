@@ -1,7 +1,7 @@
 /* eslint-disable import/no-unresolved */
 import { $ } from '@core/domHelper';
 import { updateDate } from '@/redux/actions';
-import StoreSubscriber from '@core/storeSubscriber';
+import StoreSubscriber from '@core/store/storeSubscriber';
 import Observer from '@core/Observer';
 import { preventDefault } from '@core/utils';
 

@@ -5,7 +5,7 @@ import Table from 'Component/table/Table';
 import Excel from 'Component/excel/Excel';
 import Header from 'Component/header/Header';
 import Toolbar from 'Component/toolbar/Toolbar';
-import { createStore } from '@core/createStore';
+import { createStore } from '@core/store/createStore';
 import { rootReducer } from '@/redux/rootReducer';
 import { storage, debounce } from '@core/utils';
 import { normalizeInitialState } from '../redux/initialState';
