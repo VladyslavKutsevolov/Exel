@@ -1,7 +1,7 @@
 /* eslint-disable import/no-unresolved */
 import { $ } from '@core/domHelper';
-import { Page } from '../core/Page';
-import { createRecordsTable } from './dashboard.functions';
+import { Page } from '../core/Page/Page';
+import { createRecordsTable } from '../core/shared/dashboard.functions';
 
 export class DashBoardPage extends Page {
   getRoot() {

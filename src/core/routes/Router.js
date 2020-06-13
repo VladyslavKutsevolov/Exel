@@ -1,4 +1,5 @@
 /* eslint-disable import/no-unresolved */
+import { Loader } from '../../component/Loader';
 import { $ } from '../domHelper';
 import { ActiveRoute } from './ActiveRoute';
 
@@ -12,6 +13,7 @@ export class Router {
     this.routes = routes;
     this.changePageHandler = this.changePageHandler.bind(this);
     this.page = null;
+    this.loader = new Loader();
     this.init();
   }
 
@@ -20,19 +22,21 @@ export class Router {
     this.changePageHandler();
   }
 
-  changePageHandler() {
+  async changePageHandler() {
     if (this.page) {
       this.page.destroy();
     }
-
-    this.$placeholder.clear();
 
     const Page = ActiveRoute.path.includes('excel')
       ? this.routes.excel
       : this.routes.dashboard;
 
+    this.$placeholder.clear().append(this.loader);
+
     this.page = new Page(ActiveRoute.param);
-    this.$placeholder.append(this.page.getRoot());
+
+    const root = await this.page.getRoot();
+    this.$placeholder.clear().append(root);
     this.page.afterRender();
   }
 

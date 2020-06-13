@@ -1,5 +1,6 @@
+/* eslint-disable max-classes-per-file */
 /* eslint-disable import/no-unresolved */
-import { Page } from '@core/Page';
+import { Page } from '@core/Page/Page';
 import Formula from 'Component/formula/Formula';
 import Table from 'Component/table/Table';
 import Excel from 'Component/excel/Excel';
@@ -7,23 +8,23 @@ import Header from 'Component/header/Header';
 import Toolbar from 'Component/toolbar/Toolbar';
 import { createStore } from '@core/store/createStore';
 import { rootReducer } from '@/redux/rootReducer';
-import { storage, debounce } from '@core/utils';
 import { normalizeInitialState } from '../redux/initialState';
-
-const storageName = param => `excel:${param}`;
+import StateProcessor from '../core/Page/StateProcessor';
+import LocalStorageClient from '../core/shared/LocalStorageClient';
 
 export class ExcelPage extends Page {
-  getRoot() {
-    const params = this.params ? this.params : Date.now().toString();
-    const storageState = storage(storageName(params));
+  constructor(param) {
+    super(param);
+
+    this.storeSub = null;
+    this.processor = new StateProcessor(new LocalStorageClient(this.params));
+  }
+
+  async getRoot() {
+    const storageState = await this.processor.get();
     const store = createStore(rootReducer, normalizeInitialState(storageState));
 
-    const storeListener = debounce(
-      state => storage(storageName(params), state),
-      300
-    );
-
-    store.subscribe(storeListener);
+    this.storeSub = store.subscribe(this.processor.listen);
 
     this.excel = new Excel({
       components: [Header, Toolbar, Formula, Table],
@@ -39,5 +40,6 @@ export class ExcelPage extends Page {
 
   destroy() {
     this.excel.destroy();
+    this.storeSub.unSubscribe();
   }
 }
